@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Coach and Four - 公式アプリ</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app-container">
+        <!-- HEADER -->
+        <header class="app-header" id="app-header">
+            <div class="header-inner">
+                <div class="logo-container">
+                    <img src="../../brain/83b3e9c6-ea4c-4961-b6b7-45dc409759f4/carriage_logo_premium_1775580754957.png" alt="Coach and Four Logo" class="app-logo">
+                </div>
+                <h1>Coach & Four</h1>
+            </div>
+        </header>
+
+        <!-- MAIN SCROLLABLE AREA -->
+        <main id="main-content">
+            
+            <!-- SCREENS -->
+            
+            <!-- REGISTRATION SCREEN (Initial Screen) -->
+            <section id="registration-screen" class="screen active">
+                <div class="card-soft">
+                    <h2>MEMBER CARD</h2>
+                    <p class="desc">カード会員番号をアプリに連携して、<br>デジタル会員証を作成します。</p>
+                    
+                    <form id="manual-form">
+                        <div class="input-group">
+                            <label for="member-code"><i class="fa-solid fa-credit-card"></i> 会員コード(16桁)</label>
+                            <input type="text" id="member-code" placeholder="0000 0000 0000 0000" maxlength="19" inputmode="numeric">
+                        </div>
+                        
+                        <div class="input-group" style="margin-top: 20px;">
+                            <label for="pin-code"><i class="fa-solid fa-lock"></i> PINコード(7桁)</label>
+                            <input type="text" id="pin-code" placeholder="0000000" maxlength="7" inputmode="numeric">
+                        </div>
+
+                        <button type="submit" class="btn-gold btn-press" style="margin-top: 30px;">
+                            <i class="fa-solid fa-address-card"></i> デジタル会員証を作成
+                        </button>
+                    </form>
+
+                    <div class="divider"><span>または</span></div>
+
+                    <button type="button" class="btn-primary btn-press" id="btn-start-scan">
+                        <i class="fa-solid fa-camera"></i> カード裏面のバーコードを読み取る
+                    </button>
+                    
+                    <div id="reader-container" style="display: none;">
+                        <button type="button" class="btn-secondary btn-press" id="btn-stop-scan" style="margin-bottom: 15px;">
+                            <i class="fa-solid fa-xmark"></i> スキャンをキャンセル
+                        </button>
+                        <div id="reader"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 1: ホーム -->
+            <section id="home-screen" class="screen tab-screen" style="padding: 15px 15px 30px;">
+                <!-- Barcode Area -->
+                <div class="home-barcode-area" style="background: #FFFFFF; border-radius: 20px; padding: 15px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 15px; border: 1px solid #F0F0F0;">
+                    <div style="font-size: 0.8rem; font-weight: bold; color: var(--color-brown-main); margin-bottom: 5px;"><i class="fa-solid fa-id-card"></i> MEMBERS CARD</div>
+                    <div class="barcode-wrapper" style="padding: 5px; background: #fff;">
+                        <svg id="home-barcode"></svg>
+                    </div>
+                    <p id="home-member-code" class="member-code-text" style="font-size: 0.9rem; margin: 5px 0; color: var(--color-brown-main);">0000 0000 0000 0000</p>
+                </div>
+
+                <!-- Tile Grid Container -->
+                <div class="tile-grid" id="home-tile-grid">
+                    <!-- Tiles injected via JS -->
+                </div>
+
+                <!-- Banner Slider -->
+                <div class="banner-slider">
+                    <div class="banner-wrapper">
+                        <img src="https://images.unsplash.com/photo-1544928147-79a2dbc1f389?q=80&w=800&auto=format&fit=crop" alt="マルシェのイベント" class="banner-img">
+                        <img src="https://images.unsplash.com/photo-1511192336575-5a79af67a629?q=80&w=800&auto=format&fit=crop" alt="ミュージックイベント" class="banner-img">
+                        <img src="https://images.unsplash.com/photo-1495446815901-a7297e633e8d?q=80&w=800&auto=format&fit=crop" alt="書籍のご案内" class="banner-img">
+                    </div>
+                    <div class="slider-dots">
+                        <span class="dot active"></span>
+                        <span class="dot"></span>
+                        <span class="dot"></span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 2: カード（会員証フルスクリーン） -->
+            <section id="card-screen" class="screen tab-screen">
+                <div class="card-fullscreen-wrapper">
+                    <div class="card-inner card-inner-fullscreen">
+                        <!-- Watermark Background -->
+                        <div class="card-watermark">
+                            <img src="carriage_watermark.png" alt="" class="watermark-img">
+                        </div>
+                        <div class="card-header">
+                            <div class="card-logo-small-wrap">
+                                <img src="carriage_logo.png" alt="Logo" class="card-logo-small">
+                            </div>
+                            <h2 class="card-title">MEMBER CARD</h2>
+                        </div>
+                        <div class="barcode-wrapper barcode-large">
+                            <svg id="card-barcode"></svg>
+                        </div>
+                        <p id="card-member-code" class="member-code-text member-code-large">0000 0000 0000 0000</p>
+                        
+                        <div class="points-container points-container-large">
+                            <div class="points-label-large">現在のポイント</div>
+                            <div class="points-value-large" id="card-display-points">7,890 <span class="pt-unit-large">P</span></div>
+                        </div>
+
+                        <div class="card-footer-info">
+                            <span class="card-footer-item"><i class="fa-solid fa-crown"></i> ゴールド会員</span>
+                            <span class="card-footer-item"><i class="fa-solid fa-calendar"></i> 有効期限: 2027/03/31</span>
+                        </div>
+                    </div>
+                    <div class="brightness-msg brightness-msg-card">
+                        <i class="fa-solid fa-sun icon-sun"></i> 画面を明るくしてレジで提示してください
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 3: マルシェ -->
+            <section id="marche-screen" class="screen tab-screen">
+                <div class="tab-content-header">
+                    <h2 class="tab-content-title">マルシェ</h2>
+                    <p class="tab-content-subtitle">おいしい北海道をお届けします</p>
+                </div>
+                <div id="marche-content" class="tab-scroll-content">
+                    <!-- Dynamically filled -->
+                </div>
+            </section>
+
+            <!-- TAB 4: 店舗検索 -->
+            <section id="store-screen" class="screen tab-screen">
+                <div class="tab-content-header">
+                    <h2 class="tab-content-title">店舗検索</h2>
+                    <p class="tab-content-subtitle">お近くの店舗を探す</p>
+                </div>
+                <div id="store-content" class="tab-scroll-content">
+                    <!-- Dynamically filled -->
+                </div>
+            </section>
+
+            <!-- Subpage Overlay (for menu grid items) -->
+            <section id="subpage-screen" class="screen subpage">
+                <div class="subpage-header">
+                    <button class="btn-close-subpage btn-press" id="btn-close-subpage">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                    <h2 id="subpage-title" class="subpage-title">タイトル</h2>
+                </div>
+                <div id="subpage-content" class="subpage-content">
+                    <!-- Dynamic content -->
+                </div>
+            </section>
+
+            <!-- Iframe Modal Area -->
+            <section id="iframe-screen" class="screen subpage">
+                <div class="subpage-header">
+                    <button class="btn-close-subpage btn-press" id="btn-close-iframe">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                    <h2 id="iframe-title" class="subpage-title">Loading...</h2>
+                </div>
+                <div class="iframe-content" style="flex-grow: 1; position: relative;">
+                    <iframe id="inapp-browser" src="" frameborder="0" style="position: absolute; top:0; left:0; width:100%; height:100%; border:none;"></iframe>
+                </div>
+            </section>
+        </main>
+
+        <!-- BOTTOM NAV BAR -->
+        <nav id="bottom-nav" class="bottom-nav" style="display: none;">
+            <button class="nav-item active btn-press" data-tab="home-screen" id="nav-home">
+                <i class="fa-solid fa-house"></i>
+                <span>ホーム</span>
+            </button>
+            <button class="nav-item btn-press" data-tab="card-screen" id="nav-card">
+                <i class="fa-solid fa-id-card"></i>
+                <span>カード</span>
+            </button>
+            <button class="nav-item btn-press" data-tab="marche-screen" id="nav-marche">
+                <i class="fa-solid fa-store"></i>
+                <span>マルシェ</span>
+            </button>
+            <button class="nav-item btn-press" data-tab="store-screen" id="nav-store">
+                <i class="fa-solid fa-map-location-dot"></i>
+                <span>店舗検索</span>
+            </button>
+        </nav>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <script src="app.js"></script>
+</body>
+</html>
