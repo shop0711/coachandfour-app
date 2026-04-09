@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Coach and Four - 公式アプリ</title>
+    <title>Coach and Four - 公式アプリ Ver.2.0</title>
+    <meta name="description" content="Coach and Four 公式アプリ - デジタル会員証、在庫検索、店舗情報">
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
     <!-- FontAwesome -->
@@ -16,9 +17,9 @@
         <header class="app-header" id="app-header">
             <div class="header-inner">
                 <div class="logo-container">
-                    <img src="../../brain/83b3e9c6-ea4c-4961-b6b7-45dc409759f4/carriage_logo_premium_1775580754957.png" alt="Coach and Four Logo" class="app-logo">
+                    <img src="coachandfour_logo.png" alt="Coach and Four Logo" class="app-logo">
                 </div>
-                <h1>Coach & Four</h1>
+                <h1>Coach &amp; Four</h1>
             </div>
         </header>
 
@@ -68,7 +69,7 @@
             <section id="home-screen" class="screen tab-screen" style="padding: 15px 15px 30px;">
                 <!-- Barcode Area -->
                 <div class="home-barcode-area" style="background: #FFFFFF; border-radius: 20px; padding: 15px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 15px; border: 1px solid #F0F0F0;">
-                    <div style="font-size: 0.8rem; font-weight: bold; color: var(--color-brown-main); margin-bottom: 5px;"><i class="fa-solid fa-id-card"></i> MEMBERS CARD</div>
+                    <div class="barcode-label" style="font-size: 0.8rem; font-weight: bold; color: var(--color-brown-main); margin-bottom: 5px;"><i class="fa-solid fa-id-card"></i> MEMBERS CARD</div>
                     <div class="barcode-wrapper" style="padding: 5px; background: #fff;">
                         <svg id="home-barcode"></svg>
                     </div>
@@ -95,7 +96,62 @@
                 </div>
             </section>
 
-            <!-- TAB 2: カード（会員証フルスクリーン） -->
+            <!-- TAB 2: 本を探す -->
+            <section id="search-screen" class="screen tab-screen">
+                <div class="tab-content-header">
+                    <h2 class="tab-content-title">本を探す</h2>
+                    <p class="tab-content-subtitle">ISBNバーコードで在庫・店内マップを検索</p>
+                </div>
+                <div id="search-content" class="tab-scroll-content">
+                    <!-- Intro -->
+                    <div class="search-intro">
+                        <div class="search-intro-icon">
+                            <i class="fa-solid fa-barcode"></i>
+                        </div>
+                        <h3>書籍のバーコードをスキャン</h3>
+                        <p>書籍裏面のISBNバーコード（13桁）を読み取ると、<br>在庫状況と店内マップを表示します。</p>
+                    </div>
+
+                    <!-- Scanner Button -->
+                    <div class="search-scanner-area">
+                        <button type="button" class="btn-gold btn-press" id="btn-isbn-scan">
+                            <i class="fa-solid fa-camera"></i> バーコードをスキャン
+                        </button>
+                        <div id="isbn-reader-container" style="display: none;">
+                            <button type="button" class="btn-secondary btn-press" id="btn-isbn-stop" style="margin-bottom: 15px;">
+                                <i class="fa-solid fa-xmark"></i> スキャンを停止
+                            </button>
+                            <div id="isbn-reader"></div>
+                        </div>
+                    </div>
+
+                    <!-- Manual Input -->
+                    <div class="isbn-manual-input">
+                        <h4><i class="fa-solid fa-keyboard"></i> ISBNを手動入力</h4>
+                        <div class="isbn-input-row">
+                            <input type="text" id="isbn-input" placeholder="978xxxxxxxxxx" maxlength="13" inputmode="numeric">
+                            <button type="button" class="btn-gold btn-press" id="btn-isbn-search">
+                                <i class="fa-solid fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Search Result Area (iframe) -->
+                    <div id="isbn-result-area" style="display: none;">
+                        <div class="search-result-area">
+                            <div class="search-result-header">
+                                <span><i class="fa-solid fa-book"></i> 検索結果（若葉台店）</span>
+                                <button type="button" class="btn-press" id="btn-isbn-close-result">
+                                    <i class="fa-solid fa-xmark"></i> 閉じる
+                                </button>
+                            </div>
+                            <iframe id="isbn-result-iframe" class="search-result-iframe" src="" frameborder="0"></iframe>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 3: 会員証（カードフルスクリーン） -->
             <section id="card-screen" class="screen tab-screen">
                 <div class="card-fullscreen-wrapper">
                     <div class="card-inner card-inner-fullscreen">
@@ -130,17 +186,6 @@
                 </div>
             </section>
 
-            <!-- TAB 3: マルシェ -->
-            <section id="marche-screen" class="screen tab-screen">
-                <div class="tab-content-header">
-                    <h2 class="tab-content-title">マルシェ</h2>
-                    <p class="tab-content-subtitle">おいしい北海道をお届けします</p>
-                </div>
-                <div id="marche-content" class="tab-scroll-content">
-                    <!-- Dynamically filled -->
-                </div>
-            </section>
-
             <!-- TAB 4: 店舗検索 -->
             <section id="store-screen" class="screen tab-screen">
                 <div class="tab-content-header">
@@ -149,6 +194,89 @@
                 </div>
                 <div id="store-content" class="tab-scroll-content">
                     <!-- Dynamically filled -->
+                </div>
+            </section>
+
+            <!-- TAB 5: マイページ -->
+            <section id="mypage-screen" class="screen tab-screen">
+                <div class="tab-content-header">
+                    <h2 class="tab-content-title">マイページ</h2>
+                    <p class="tab-content-subtitle">設定・アカウント管理</p>
+                </div>
+                <div id="mypage-content" class="tab-scroll-content">
+                    <!-- Header Card -->
+                    <div class="mypage-header-card">
+                        <div class="mypage-user-info">
+                            <div class="mypage-avatar">
+                                <i class="fa-solid fa-user"></i>
+                            </div>
+                            <div class="mypage-user-detail">
+                                <h3>会員メンバー</h3>
+                                <p id="mypage-member-code">0000 0000 0000 0000</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Settings Section -->
+                    <div class="mypage-section">
+                        <div class="mypage-section-title">設定</div>
+                        <div class="mypage-menu-list">
+                            <div class="mypage-menu-item" id="mypage-darkmode-item">
+                                <div class="mypage-menu-icon icon-dark">
+                                    <i class="fa-solid fa-moon"></i>
+                                </div>
+                                <div class="mypage-menu-text">
+                                    <span>ダークモード</span>
+                                    <small>画面の配色を暗くします</small>
+                                </div>
+                                <div class="mypage-menu-right">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="darkmode-toggle">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Account Section -->
+                    <div class="mypage-section">
+                        <div class="mypage-section-title">アカウント</div>
+                        <div class="mypage-menu-list">
+                            <button class="mypage-menu-item" id="btn-reset-member">
+                                <div class="mypage-menu-icon icon-reset">
+                                    <i class="fa-solid fa-arrow-rotate-left"></i>
+                                </div>
+                                <div class="mypage-menu-text">
+                                    <span>会員情報をリセット</span>
+                                    <small>登録済みの会員番号を削除します</small>
+                                </div>
+                                <div class="mypage-menu-right">
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- App Info Section -->
+                    <div class="mypage-section">
+                        <div class="mypage-section-title">アプリ情報</div>
+                        <div class="mypage-menu-list">
+                            <div class="mypage-menu-item">
+                                <div class="mypage-menu-icon icon-info">
+                                    <i class="fa-solid fa-info"></i>
+                                </div>
+                                <div class="mypage-menu-text">
+                                    <span>Coach & Four 公式アプリ</span>
+                                    <small>Version 2.0</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mypage-version">
+                        &copy; Coach and Four. All Rights Reserved.
+                    </div>
                 </div>
             </section>
 
@@ -179,23 +307,29 @@
             </section>
         </main>
 
-        <!-- BOTTOM NAV BAR -->
+        <!-- BOTTOM NAV BAR (5 items) -->
         <nav id="bottom-nav" class="bottom-nav" style="display: none;">
             <button class="nav-item active btn-press" data-tab="home-screen" id="nav-home">
                 <i class="fa-solid fa-house"></i>
                 <span>ホーム</span>
             </button>
-            <button class="nav-item btn-press" data-tab="card-screen" id="nav-card">
-                <i class="fa-solid fa-id-card"></i>
-                <span>カード</span>
+            <button class="nav-item btn-press" data-tab="search-screen" id="nav-search">
+                <i class="fa-solid fa-book-open"></i>
+                <span>本を探す</span>
             </button>
-            <button class="nav-item btn-press" data-tab="marche-screen" id="nav-marche">
-                <i class="fa-solid fa-store"></i>
-                <span>マルシェ</span>
+            <button class="nav-item nav-center btn-press" data-tab="card-screen" id="nav-card">
+                <div class="nav-center-circle">
+                    <i class="fa-solid fa-id-card"></i>
+                </div>
+                <span>会員証</span>
             </button>
             <button class="nav-item btn-press" data-tab="store-screen" id="nav-store">
                 <i class="fa-solid fa-map-location-dot"></i>
                 <span>店舗検索</span>
+            </button>
+            <button class="nav-item btn-press" data-tab="mypage-screen" id="nav-mypage">
+                <i class="fa-solid fa-user"></i>
+                <span>マイページ</span>
             </button>
         </nav>
     </div>

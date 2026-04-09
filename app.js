@@ -1,4 +1,4 @@
-// app.js — Coach & Four Phase 2
+// app.js — Coach & Four Ver.2.0
 
 // --- Home Menu Tiles ---
 const HOME_MENU_TILES = [
@@ -58,73 +58,6 @@ const SUBPAGE_DATA = {
         ]
     }
 };
-
-// --- Marche Tab Content ---
-const MARCHE_CONTENT = [
-    {
-        type: 'card',
-        image: 'https://images.unsplash.com/photo-1559598467-f8b76081e19b?q=80&w=600&auto=format&fit=crop',
-        title: '期間限定：人気の北海道スイーツ販売中',
-        tag: '期間限定',
-        tagClass: 'tag-limited',
-        text: '人気のバターサンドから、限定のメロンゼリーまで。北海道ならではの絶品スイーツを多数取り揃えております。ご自宅用やお土産にぜひご利用ください。'
-    },
-    {
-        type: 'card',
-        image: 'https://images.unsplash.com/photo-1599598425947-33004a434914?q=80&w=600&auto=format&fit=crop',
-        title: 'イベント：うまい棒つかみ取り（数量限定）',
-        tag: 'イベント',
-        tagClass: 'tag-event',
-        text: 'お子様に大人気のうまい棒つかみ取りイベント！たくさん掴めた方には特別賞品も。数量限定のためお早めに！'
-    },
-    {
-        type: 'card',
-        image: 'https://images.unsplash.com/photo-1488459716781-31db52582fe9?q=80&w=600&auto=format&fit=crop',
-        title: '本日のおすすめ：産地直送の新鮮な一品',
-        tag: 'おすすめ',
-        tagClass: 'tag-recommend',
-        text: '毎日入荷する産地直送の新鮮野菜やフルーツ。本日は北海道富良野産のメロンが特別入荷しております。'
-    },
-    {
-        type: 'divider',
-        icon: 'fa-solid fa-compact-disc',
-        text: 'ミュージック'
-    },
-    {
-        type: 'card',
-        image: 'https://images.unsplash.com/photo-1511192336575-5a79af67a629?q=80&w=600&auto=format&fit=crop',
-        title: '最新ランキング：今週のヒットチャート',
-        tag: 'ランキング',
-        tagClass: 'tag-ranking',
-        text: '今週のCD・レコード売上ランキングをチェック！店頭では試聴コーナーもご用意しております。'
-    },
-    {
-        type: 'ranking',
-        items: [
-            { rank: 1, title: 'Butterfly', artist: '木村カエラ' },
-            { rank: 2, title: 'さよならエレジー', artist: '菅田将暉' },
-            { rank: 3, title: 'Lemon', artist: '米津玄師' },
-            { rank: 4, title: 'Pretender', artist: 'Official髭男dism' },
-            { rank: 5, title: 'マリーゴールド', artist: 'あいみょん' }
-        ]
-    },
-    {
-        type: 'card',
-        image: 'https://images.unsplash.com/photo-1458560871784-56d23406c091?q=80&w=600&auto=format&fit=crop',
-        title: 'イベントレポート：過去の特典会・トークイベントの様子',
-        tag: 'イベント',
-        tagClass: 'tag-event',
-        text: '先月開催されたサイン会・トークイベントの様子をレポート。来月のイベントスケジュールもお見逃しなく！'
-    },
-    {
-        type: 'card',
-        image: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=600&auto=format&fit=crop',
-        title: '予約受付中：注目の新譜リリース情報',
-        tag: 'NEW',
-        tagClass: 'tag-new',
-        text: '来月リリースの注目アルバム・シングルの予約受付中！初回限定盤はなくなり次第終了。店頭またはオンラインでお申し込みいただけます。'
-    }
-];
 
 // --- Store Tab Content ---
 const STORE_DATA = [
@@ -196,12 +129,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const screenRegistration = document.getElementById('registration-screen');
     const screenHome = document.getElementById('home-screen');
     const screenCard = document.getElementById('card-screen');
-    const screenMarche = document.getElementById('marche-screen');
+    const screenSearch = document.getElementById('search-screen');
     const screenStore = document.getElementById('store-screen');
+    const screenMypage = document.getElementById('mypage-screen');
     const screenSubpage = document.getElementById('subpage-screen');
     const bottomNav = document.getElementById('bottom-nav');
     
-    // Scan
+    // Scan (Registration)
     const btnStartScan = document.getElementById('btn-start-scan');
     const btnStopScan = document.getElementById('btn-stop-scan');
     const readerContainer = document.getElementById('reader-container');
@@ -234,12 +168,29 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnCloseIframe = document.getElementById('btn-close-iframe');
     const iframeExtLink = document.getElementById('iframe-external-link');
 
+    // ISBN Search
+    const btnIsbnScan = document.getElementById('btn-isbn-scan');
+    const btnIsbnStop = document.getElementById('btn-isbn-stop');
+    const isbnReaderContainer = document.getElementById('isbn-reader-container');
+    const isbnInput = document.getElementById('isbn-input');
+    const btnIsbnSearch = document.getElementById('btn-isbn-search');
+    const isbnResultArea = document.getElementById('isbn-result-area');
+    const isbnResultIframe = document.getElementById('isbn-result-iframe');
+    const btnIsbnCloseResult = document.getElementById('btn-isbn-close-result');
+
+    // Mypage
+    const darkmodeToggle = document.getElementById('darkmode-toggle');
+    const btnResetMember = document.getElementById('btn-reset-member');
+    const mypageMemberCode = document.getElementById('mypage-member-code');
+
     // Nav items
     const navItems = document.querySelectorAll('.nav-item');
 
     // State
     const STORAGE_KEY = 'coachandfour_member_data';
+    const THEME_KEY = 'coachandfour_theme';
     let html5QrCode = null;
+    let isbnScanner = null;
     let wakeLock = null;
     let currentMemberCode = null;
 
@@ -248,19 +199,43 @@ document.addEventListener('DOMContentLoaded', () => {
         'registration-screen': screenRegistration,
         'home-screen': screenHome,
         'card-screen': screenCard,
-        'marche-screen': screenMarche,
-        'store-screen': screenStore
+        'search-screen': screenSearch,
+        'store-screen': screenStore,
+        'mypage-screen': screenMypage
     };
 
     // --- Initialize ---
+    initTheme();
     checkExistingData();
     populateHomeMenu();
     setupMenuListeners();
     setupIframeListeners();
     setupSliderListeners();
     setupBottomNav();
+    setupIsbnSearch();
+    setupMypageListeners();
 
     // --- Functions ---
+
+    /* === Theme (Dark Mode) === */
+    function initTheme() {
+        const savedTheme = localStorage.getItem(THEME_KEY);
+        if (savedTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            if (darkmodeToggle) darkmodeToggle.checked = true;
+        }
+    }
+
+    function toggleTheme() {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        if (isDark) {
+            document.documentElement.removeAttribute('data-theme');
+            localStorage.setItem(THEME_KEY, 'light');
+        } else {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            localStorage.setItem(THEME_KEY, 'dark');
+        }
+    }
 
     function checkExistingData() {
         const data = localStorage.getItem(STORAGE_KEY);
@@ -316,12 +291,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Populate dynamic content on first switch
-        if (tabId === 'marche-screen') {
-            populateMarcheContent();
-        } else if (tabId === 'store-screen') {
+        if (tabId === 'store-screen') {
             populateStoreContent();
         } else if (tabId === 'card-screen') {
             renderCardScreen();
+        } else if (tabId === 'mypage-screen') {
+            updateMypageInfo();
         }
 
         // Request wake lock when on card screen
@@ -341,7 +316,7 @@ document.addEventListener('DOMContentLoaded', () => {
         e.target.value = formattedValue;
     });
 
-    /* === Camera Scanning === */
+    /* === Camera Scanning (Registration) === */
     btnStartScan.addEventListener('click', async () => {
         readerContainer.style.display = 'block';
         btnStartScan.style.display = 'none';
@@ -423,8 +398,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else if (tile.type === 'subpage') {
                     openSubpage(tile.target);
                 } else if (tile.type === 'tab') {
-                    // Because bottom nav still exists, we can trick it by clicking the corresponding nav item if it exists
-                    // Or call switchTab directly! Let's find the nav item to update its state.
                     const navBtn = document.querySelector(`.nav-item[data-tab="${tile.target}"]`);
                     if (navBtn) {
                         navBtn.click();
@@ -488,15 +461,23 @@ document.addEventListener('DOMContentLoaded', () => {
         return formatted;
     }
 
+    /**
+     * Generate barcode with special encoding:
+     * Encode data = "D" + 16-digit member code + "B"
+     * Display text = digits only (handled by custom CSS text, displayValue: false)
+     */
     function generateBarcode(svgEl, code) {
         try {
-            JsBarcode(svgEl, code, {
+            // Encode with D prefix and B suffix per store system specification
+            const encodedData = "D" + code + "B";
+            
+            JsBarcode(svgEl, encodedData, {
                 format: "CODE128",
                 lineColor: "#000",
                 displayValue: false,
                 margin: 0,
                 background: "#FFFFFF",
-                width: 2.2   // Slightly wider barWidth for better scanner readability
+                width: 2.2
             });
             svgEl.setAttribute("width", "100%");
         } catch (e) {
@@ -510,20 +491,6 @@ document.addEventListener('DOMContentLoaded', () => {
         
         cardMemberCode.textContent = formatMemberCode(currentMemberCode);
         generateBarcode(cardBarcodeSvg, currentMemberCode);
-    }
-
-    /* === Marche Tab Content === */
-    let marchePopulated = false;
-    function populateMarcheContent() {
-        if (marchePopulated) return;
-        marchePopulated = true;
-
-        const container = document.getElementById('marche-content');
-        container.innerHTML = '';
-
-        MARCHE_CONTENT.forEach(item => {
-            container.insertAdjacentHTML('beforeend', renderContentItem(item));
-        });
     }
 
     /* === Store Tab Content === */
@@ -567,6 +534,142 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
         `;
         container.insertAdjacentHTML('beforeend', mapHtml);
+    }
+
+    /* === ISBN Search (本を探す) === */
+    function setupIsbnSearch() {
+        // Scan button
+        if (btnIsbnScan) {
+            btnIsbnScan.addEventListener('click', startIsbnScan);
+        }
+        
+        // Stop scan
+        if (btnIsbnStop) {
+            btnIsbnStop.addEventListener('click', stopIsbnScan);
+        }
+        
+        // Manual search
+        if (btnIsbnSearch) {
+            btnIsbnSearch.addEventListener('click', () => {
+                const isbn = isbnInput.value.replace(/\D/g, '');
+                if (isbn.length === 13 || isbn.length === 10) {
+                    showIsbnResult(isbn);
+                } else {
+                    alert("ISBNは10桁または13桁で入力してください。");
+                }
+            });
+        }
+        
+        // Enter key on ISBN input
+        if (isbnInput) {
+            isbnInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    btnIsbnSearch.click();
+                }
+            });
+        }
+        
+        // Close result
+        if (btnIsbnCloseResult) {
+            btnIsbnCloseResult.addEventListener('click', () => {
+                isbnResultArea.style.display = 'none';
+                isbnResultIframe.src = '';
+            });
+        }
+    }
+
+    async function startIsbnScan() {
+        isbnReaderContainer.style.display = 'block';
+        btnIsbnScan.style.display = 'none';
+        
+        if (!isbnScanner) {
+            isbnScanner = new Html5Qrcode("isbn-reader");
+        }
+        
+        const config = { fps: 10, qrbox: { width: 250, height: 100 } };
+        
+        try {
+            await isbnScanner.start({ facingMode: "environment" }, config, (decodedText) => {
+                // Extract digits from scanned barcode
+                const digits = decodedText.replace(/\D/g, '');
+                // ISBN-13 starts with 978 or 979
+                if (digits.length === 13 && (digits.startsWith('978') || digits.startsWith('979'))) {
+                    stopIsbnScan();
+                    isbnInput.value = digits;
+                    showIsbnResult(digits);
+                } else if (digits.length === 10) {
+                    // ISBN-10
+                    stopIsbnScan();
+                    isbnInput.value = digits;
+                    showIsbnResult(digits);
+                }
+            });
+        } catch (err) {
+            console.error("ISBN Camera access failed", err);
+            alert("カメラの起動に失敗しました。ISBNを手動入力してください。");
+            stopIsbnScan();
+        }
+    }
+
+    async function stopIsbnScan() {
+        if (isbnScanner && isbnScanner.isScanning) {
+            await isbnScanner.stop();
+        }
+        isbnReaderContainer.style.display = 'none';
+        if (btnIsbnScan) btnIsbnScan.style.display = 'flex';
+    }
+
+    function showIsbnResult(isbn) {
+        const url = `https://www.shoten.co.jp/rel/searchbook/stock.asp?isbn=${isbn}&st=7&map=Y`;
+        isbnResultIframe.src = url;
+        isbnResultArea.style.display = 'block';
+        
+        // Scroll to result
+        isbnResultArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    /* === Mypage Listeners === */
+    function setupMypageListeners() {
+        // Dark mode toggle - checkbox change event
+        if (darkmodeToggle) {
+            darkmodeToggle.addEventListener('change', () => {
+                toggleTheme();
+            });
+        }
+
+        // Also make the entire dark mode row clickable (excluding the toggle itself)
+        const darkmodeItem = document.getElementById('mypage-darkmode-item');
+        if (darkmodeItem) {
+            darkmodeItem.addEventListener('click', (e) => {
+                // Only trigger if the click wasn't directly on the toggle input or its label
+                if (e.target !== darkmodeToggle && !e.target.classList.contains('toggle-slider')) {
+                    darkmodeToggle.checked = !darkmodeToggle.checked;
+                    toggleTheme();
+                }
+            });
+        }
+
+        // Reset member data
+        if (btnResetMember) {
+            btnResetMember.addEventListener('click', () => {
+                if (confirm("会員情報をリセットしますか？\n登録済みの会員番号が削除されます。")) {
+                    localStorage.removeItem(STORAGE_KEY);
+                    currentMemberCode = null;
+                    bottomNav.style.display = 'none';
+                    showScreen(screenRegistration);
+                    // Clear form inputs
+                    inputMemberCode.value = '';
+                    inputPinCode.value = '';
+                }
+            });
+        }
+    }
+
+    function updateMypageInfo() {
+        if (currentMemberCode && mypageMemberCode) {
+            mypageMemberCode.textContent = formatMemberCode(currentMemberCode);
+        }
     }
 
     /* === Helpers === */
