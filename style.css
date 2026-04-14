@@ -1874,7 +1874,7 @@ button {
 .sns-embed-container {
     border-radius: var(--radius-large);
     overflow: hidden;
-    min-height: 200px;
+    min-height: 400px;
 }
 
 .insta-header {

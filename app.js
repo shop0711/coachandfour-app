@@ -246,20 +246,15 @@ document.addEventListener('DOMContentLoaded', () => {
         container.style.display = 'block';
 
         if (window.twttr && window.twttr.widgets) {
-            window.twttr.widgets.load(container);
-            
-            // Re-bind just in case, or for first render
-            window.twttr.events.bind('rendered', function (event) {
-                if (event.target && event.target.parentNode && event.target.parentNode.id === 'x-widget-container') {
-                    const skeleton = document.querySelector('.x-timeline-placeholder');
-                    if (skeleton) {
-                        skeleton.style.opacity = '0';
-                        setTimeout(() => {
-                            skeleton.style.display = 'none';
-                            container.style.display = 'block';
-                            container.style.animation = 'fadeIn 0.5s ease forwards';
-                        }, 300);
-                    }
+            window.twttr.widgets.load(container).then(() => {
+                const skeleton = document.querySelector('.x-timeline-placeholder');
+                if (skeleton) {
+                    skeleton.style.opacity = '0';
+                    setTimeout(() => {
+                        skeleton.style.display = 'none';
+                        container.style.display = 'block';
+                        container.style.animation = 'fadeIn 0.5s ease forwards';
+                    }, 300);
                 }
             });
         }
@@ -404,12 +399,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (tabId === 'mypage-screen') {
             updateMypageInfo();
         } else if (tabId === 'latest-screen') {
-            // Ensure Twitter widget is re-rendered correctly
-            if (window.twttr && window.twttr.widgets) {
-                window.twttr.widgets.load(document.getElementById('x-widget-container'));
-            } else {
-                loadTwitterWidget();
-            }
+            loadTwitterWidget();
         }
 
         // Request wake lock when on card screen
