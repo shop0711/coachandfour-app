@@ -2,15 +2,15 @@
 
 // --- Home Menu Tiles ---
 const HOME_MENU_TILES = [
-    { type: 'iframe', target: 'https://www.shoten.co.jp/rel/searchbook/', color: '#00B7CE', icon: 'fa-solid fa-book',             en: 'BOOKS',           ja: '在庫検索・お取り置き' },
-    { type: 'iframe', target: 'https://www.shoten.co.jp/rel/searchcd/',   color: '#E89558', icon: 'fa-solid fa-compact-disc',     en: 'CD&DVD/BD',       ja: '在庫検索・予約・ご注文' },
-    { type: 'iframe', target: 'https://www.coachandfour.ne.jp/original/', color: '#78C06E', icon: 'fa-solid fa-gift',             en: 'BONUS ITEM',      ja: '特典付商品情報' },
-    { type: 'iframe', target: 'https://www.coachandfour.ne.jp/books/books_ranking/', color: '#00B7CE', icon: 'fa-solid fa-crown', en: 'BOOKS RANKING',   ja: '書籍ランキング' },
-    { type: 'iframe', target: 'https://www.coachandfour.ne.jp/music/album_ranking/', color: '#E89558', icon: 'fa-solid fa-crown', en: 'CD&DVD RANKING',  ja: 'CD・DVDランキング' },
-    { type: 'iframe', target: 'https://www.coachandfour-shop.com/',       color: '#4A2F24', icon: 'fa-solid fa-cart-shopping',    en: 'WEB SHOP',        ja: 'オンラインショップ' },
-    { type: 'iframe', target: 'https://www.coachandfour.ne.jp/event/',    color: '#E9546B', icon: 'fa-solid fa-calendar-check',   en: 'EVENT INFO',      ja: 'サイン会・インストアライブ' },
-    { type: 'iframe', target: 'https://www.coachandfour.ne.jp/recruit/',  color: '#555555', icon: 'fa-solid fa-user-group',       en: 'RECRUIT',         ja: '採用情報（各都市）' },
-    { type: 'tab',    target: 'store-screen',                             color: '#4A2F24', icon: 'fa-solid fa-map-location-dot', en: 'STORE INFO',      ja: '店舗一覧' }
+    { type: 'iframe', target: 'https://www.shoten.co.jp/rel/searchbook/', color: '#88C9D4', icon: 'fa-solid fa-book',             en: 'BOOKS',           ja: '在庫検索・お取り置き' },
+    { type: 'iframe', target: 'https://www.shoten.co.jp/rel/searchcd/',   color: '#E5A574', icon: 'fa-solid fa-compact-disc',     en: 'CD&DVD/BD',       ja: '在庫検索・予約・ご注文' },
+    { type: 'iframe', target: 'https://www.coachandfour.ne.jp/original/', color: '#97C98C', icon: 'fa-solid fa-gift',             en: 'BONUS ITEM',      ja: '特典付商品情報' },
+    { type: 'iframe', target: 'https://www.coachandfour.ne.jp/books/books_ranking/', color: '#88C9D4', icon: 'fa-solid fa-crown', en: 'BOOKS RANKING',   ja: '書籍ランキング' },
+    { type: 'iframe', target: 'https://www.coachandfour.ne.jp/music/album_ranking/', color: '#E5A574', icon: 'fa-solid fa-crown', en: 'CD&DVD RANKING',  ja: 'CD・DVDランキング' },
+    { type: 'iframe', target: 'https://www.coachandfour-shop.com/',       color: '#9E8675', icon: 'fa-solid fa-cart-shopping',    en: 'WEB SHOP',        ja: 'オンラインショップ' },
+    { type: 'iframe', target: 'https://www.coachandfour.ne.jp/event/',    color: '#E58A97', icon: 'fa-solid fa-calendar-check',   en: 'EVENT INFO',      ja: 'サイン会・インストアライブ' },
+    { type: 'iframe', target: 'https://www.coachandfour.ne.jp/recruit/',  color: '#999999', icon: 'fa-solid fa-user-group',       en: 'RECRUIT',         ja: '採用情報（各都市）' },
+    { type: 'tab',    target: 'store-screen',                             color: '#9E8675', icon: 'fa-solid fa-map-location-dot', en: 'STORE INFO',      ja: '店舗一覧' }
 ];
 
 // --- Data Driven Subpage Content ---
@@ -131,6 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const screenCard = document.getElementById('card-screen');
     const screenSearch = document.getElementById('search-screen');
     const screenStore = document.getElementById('store-screen');
+    const screenLatest = document.getElementById('latest-screen');
     const screenMypage = document.getElementById('mypage-screen');
     const screenSubpage = document.getElementById('subpage-screen');
     const bottomNav = document.getElementById('bottom-nav');
@@ -200,6 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'home-screen': screenHome,
         'card-screen': screenCard,
         'search-screen': screenSearch,
+        'latest-screen': screenLatest,
         'store-screen': screenStore,
         'mypage-screen': screenMypage
     };
@@ -214,8 +216,110 @@ document.addEventListener('DOMContentLoaded', () => {
     setupBottomNav();
     setupIsbnSearch();
     setupMypageListeners();
+    setupLatestScreen();
 
     // --- Functions ---
+
+    /* === LATEST (SNS) Screen === */
+    function loadTwitterWidget() {
+        const container = document.getElementById('x-widget-container');
+        if (!container) return;
+        
+        // Remove existing content to recreate widget
+        container.innerHTML = '';
+        
+        const anchor = document.createElement('a');
+        anchor.className = 'twitter-timeline';
+        anchor.href = 'https://twitter.com/cf_wakabadai?ref_src=twsrc%5Etfw';
+        anchor.innerText = 'Tweets by cf_wakabadai';
+        anchor.setAttribute('data-height', '500');
+        anchor.setAttribute('data-chrome', 'noheader nofooter noborders transparent');
+        
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        if (isDark) {
+            anchor.setAttribute('data-theme', 'dark');
+        } else {
+            anchor.setAttribute('data-theme', 'light');
+        }
+        
+        container.appendChild(anchor);
+        container.style.display = 'block';
+
+        if (window.twttr && window.twttr.widgets) {
+            window.twttr.widgets.load(container);
+            
+            // Re-bind just in case, or for first render
+            window.twttr.events.bind('rendered', function (event) {
+                if (event.target && event.target.parentNode && event.target.parentNode.id === 'x-widget-container') {
+                    const skeleton = document.querySelector('.x-timeline-placeholder');
+                    if (skeleton) {
+                        skeleton.style.opacity = '0';
+                        setTimeout(() => {
+                            skeleton.style.display = 'none';
+                            container.style.display = 'block';
+                            container.style.animation = 'fadeIn 0.5s ease forwards';
+                        }, 300);
+                    }
+                }
+            });
+        }
+    }
+
+    /* === LATEST (SNS) Screen === */
+    function setupLatestScreen() {
+        const btnX = document.getElementById('btn-sns-x');
+        const btnInsta = document.getElementById('btn-sns-insta');
+        const contentX = document.getElementById('sns-x');
+        const contentInsta = document.getElementById('sns-insta');
+        const slider = document.getElementById('sns-segment-slider');
+        const latestContent = document.getElementById('latest-content');
+
+        if (!btnX || !btnInsta) return;
+
+        function switchSnsTab(target) {
+            if (target === 'sns-x') {
+                btnX.classList.add('active');
+                btnInsta.classList.remove('active');
+                contentX.classList.add('active');
+                contentInsta.classList.remove('active');
+                if(slider) slider.style.transform = 'translateX(0)';
+            } else {
+                btnX.classList.remove('active');
+                btnInsta.classList.add('active');
+                contentX.classList.remove('active');
+                contentInsta.classList.add('active');
+                if(slider) slider.style.transform = 'translateX(100%)';
+            }
+        }
+
+        btnX.addEventListener('click', () => switchSnsTab('sns-x'));
+        btnInsta.addEventListener('click', () => switchSnsTab('sns-insta'));
+
+        // Swipe support
+        if (latestContent) {
+            let startX = 0;
+            let currentX = 0;
+            latestContent.addEventListener('touchstart', (e) => {
+                startX = e.touches[0].clientX;
+            }, { passive: true });
+            
+            latestContent.addEventListener('touchend', (e) => {
+                currentX = e.changedTouches[0].clientX;
+                const diff = startX - currentX;
+                // Swipe Left (Show Insta)
+                if (diff > 50) {
+                    switchSnsTab('sns-insta');
+                }
+                // Swipe Right (Show X)
+                else if (diff < -50) {
+                    switchSnsTab('sns-x');
+                }
+            }, { passive: true });
+        }
+        
+        // Init Twitter Widget
+        loadTwitterWidget();
+    }
 
     /* === Theme (Dark Mode) === */
     function initTheme() {
@@ -235,6 +339,8 @@ document.addEventListener('DOMContentLoaded', () => {
             document.documentElement.setAttribute('data-theme', 'dark');
             localStorage.setItem(THEME_KEY, 'dark');
         }
+        // Update Twitter Widget theme
+        loadTwitterWidget();
     }
 
     function checkExistingData() {
@@ -297,6 +403,13 @@ document.addEventListener('DOMContentLoaded', () => {
             renderCardScreen();
         } else if (tabId === 'mypage-screen') {
             updateMypageInfo();
+        } else if (tabId === 'latest-screen') {
+            // Ensure Twitter widget is re-rendered correctly
+            if (window.twttr && window.twttr.widgets) {
+                window.twttr.widgets.load(document.getElementById('x-widget-container'));
+            } else {
+                loadTwitterWidget();
+            }
         }
 
         // Request wake lock when on card screen
