@@ -225,38 +225,39 @@ document.addEventListener('DOMContentLoaded', () => {
         const container = document.getElementById('x-widget-container');
         if (!container) return;
         
-        // Remove existing content to recreate widget
+        // 既存のコンテンツ（初期HTMLのaタグや古いiframe）をクリア
         container.innerHTML = '';
-        
-        const anchor = document.createElement('a');
-        anchor.className = 'twitter-timeline';
-        anchor.href = 'https://twitter.com/cf_wakabadai?ref_src=twsrc%5Etfw';
-        anchor.innerText = 'Tweets by cf_wakabadai';
-        anchor.setAttribute('data-height', '500');
-        anchor.setAttribute('data-chrome', 'noheader nofooter noborders transparent');
-        
-        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-        if (isDark) {
-            anchor.setAttribute('data-theme', 'dark');
-        } else {
-            anchor.setAttribute('data-theme', 'light');
-        }
-        
-        container.appendChild(anchor);
         container.style.display = 'block';
 
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        
+        // X公式のSPA向けメソッド `createTimeline` を使用
+        // ※ `.load()` はPromiseを返さないため、`.then()` で確実な制御ができるこちらを採用
         if (window.twttr && window.twttr.widgets) {
-            window.twttr.widgets.load(container).then(() => {
+            window.twttr.widgets.createTimeline(
+                {
+                    sourceType: 'profile',
+                    screenName: 'cf_wakabadai'
+                },
+                container,
+                {
+                    height: 500,
+                    chrome: 'noheader nofooter noborders transparent',
+                    theme: isDark ? 'dark' : 'light'
+                }
+            ).then(() => {
+                // レンダリング完了後にスケルトンを非表示にする
                 const skeleton = document.querySelector('.x-timeline-placeholder');
                 if (skeleton) {
-                    skeleton.style.opacity = '0';
-                    setTimeout(() => {
-                        skeleton.style.display = 'none';
-                        container.style.display = 'block';
-                        container.style.animation = 'fadeIn 0.5s ease forwards';
-                    }, 300);
+                    skeleton.style.display = 'none';
                 }
+                container.style.animation = 'fadeIn 0.5s ease forwards';
+            }).catch((error) => {
+                console.error("X タイムラインの読み込みに失敗しました:", error);
             });
+        } else {
+            // スクリプトのロードが間に合っていない場合のリトライ
+            setTimeout(loadTwitterWidget, 300);
         }
     }
 
