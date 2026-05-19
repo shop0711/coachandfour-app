@@ -197,85 +197,9 @@
                 </div>
             </section>
 
-            <!-- TAB LATEST: SNS連携 -->
-            <section id="latest-screen" class="screen tab-screen">
-                <div class="tab-content-header">
-                    <h2 class="tab-content-title">LATEST</h2>
-                    <p class="tab-content-subtitle">最新情報（コーチャンフォー若葉台店）</p>
-                </div>
-                
-                <div class="segment-control">
-                    <div class="segment-slider" id="sns-segment-slider"></div>
-                    <button class="segment-btn active" data-target="sns-x" id="btn-sns-x">
-                        <i class="fa-brands fa-x-twitter"></i> X
-                    </button>
-                    <button class="segment-btn" data-target="sns-insta" id="btn-sns-insta">
-                        <i class="fa-brands fa-instagram"></i> Instagram
-                    </button>
-                </div>
-
-                <div id="latest-content" class="tab-scroll-content" style="position: relative; flex: 1;">
-                    <!-- X Timeline -->
-                    <div class="sns-content-area active" id="sns-x">
-                        <div class="sns-widget-wrapper">
-                            <!-- スケルトン -->
-                            <div class="x-timeline-placeholder skeleton-loader">
-                                <div class="x-header">
-                                    <div class="x-avatar"><i class="fa-brands fa-x-twitter"></i></div>
-                                    <div class="x-user-info">
-                                        <h3>コーチャンフォー若葉台店</h3>
-                                        <span>@cf_wakabadai</span>
-                                    </div>
-                                </div>
-                                <div class="x-post">
-                                    <div class="x-text-line"></div>
-                                    <div class="x-text-line"></div>
-                                    <div class="x-text-line short"></div>
-                                </div>
-                                <div class="x-post">
-                                    <div class="x-text-line"></div>
-                                    <div class="x-text-line short"></div>
-                                </div>
-                                <div class="x-post">
-                                    <div class="x-text-line"></div>
-                                    <div class="x-text-line"></div>
-                                    <div class="x-text-line short"></div>
-                                </div>
-                            </div>
-                            <!-- ウィジェットコンテナ -->
-                            <div id="x-widget-container" class="sns-embed-container">
-                                <a class="twitter-timeline" 
-                                   data-height="500" 
-                                   data-chrome="noheader nofooter noborders transparent"
-                                   href="https://twitter.com/cf_wakabadai?ref_src=twsrc%5Etfw">Tweets by cf_wakabadai</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Instagram Grid -->
-                    <div class="sns-content-area" id="sns-insta">
-                        <a href="https://www.instagram.com/coachandfour_wakabadai/" target="_blank" class="insta-link-wrapper">
-                            <div class="insta-header">
-                                <div class="insta-avatar">
-                                    <div class="insta-avatar-inner"><i class="fa-brands fa-instagram"></i></div>
-                                </div>
-                                <div class="insta-user-info">
-                                    <h3>コーチャンフォー若葉台店</h3>
-                                    <span>coachandfour_wakabadai</span>
-                                </div>
-                                <div class="insta-open-btn"><i class="fa-solid fa-arrow-up-right-from-square"></i></div>
-                            </div>
-                            <div class="insta-grid-placeholder">
-                                <div class="insta-item"><img src="https://images.unsplash.com/photo-1544928147-79a2dbc1f389?q=80&w=200&h=200&fit=crop" alt="Image"></div>
-                                <div class="insta-item"><img src="https://images.unsplash.com/photo-1511192336575-5a79af67a629?q=80&w=200&h=200&fit=crop" alt="Image"></div>
-                                <div class="insta-item"><img src="https://images.unsplash.com/photo-1495446815901-a7297e633e8d?q=80&w=200&h=200&fit=crop" alt="Image"></div>
-                                <div class="insta-item"><img src="https://images.unsplash.com/photo-1513151233558-d860c5398176?q=80&w=200&h=200&fit=crop" alt="Image"></div>
-                                <div class="insta-item"><img src="https://images.unsplash.com/photo-1458560871784-56d23406c091?q=80&w=200&h=200&fit=crop" alt="Image"></div>
-                                <div class="insta-item"><img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=200&h=200&fit=crop" alt="Image"></div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
+            <!-- TAB MAP: 店舗マップ -->
+            <section id="map-screen" class="screen tab-screen">
+                <iframe id="map-iframe" src="https://shop0711.github.io/cf-wakabadai-map/"></iframe>
             </section>
 
             <!-- TAB 5: マイページ -->
@@ -404,9 +328,9 @@
                 </div>
                 <span>会員証</span>
             </button>
-            <button class="nav-item btn-press" data-tab="latest-screen" id="nav-latest">
-                <i class="fa-solid fa-bolt"></i>
-                <span>LATEST</span>
+            <button class="nav-item btn-press" data-tab="map-screen" id="nav-map">
+                <i class="fa-solid fa-map-location-dot"></i>
+                <span>MAP</span>
             </button>
             <button class="nav-item btn-press" data-tab="mypage-screen" id="nav-mypage">
                 <i class="fa-solid fa-user"></i>

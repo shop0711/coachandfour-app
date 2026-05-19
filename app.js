@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const screenCard = document.getElementById('card-screen');
     const screenSearch = document.getElementById('search-screen');
     const screenStore = document.getElementById('store-screen');
-    const screenLatest = document.getElementById('latest-screen');
+    const screenMap = document.getElementById('map-screen');
     const screenMypage = document.getElementById('mypage-screen');
     const screenSubpage = document.getElementById('subpage-screen');
     const bottomNav = document.getElementById('bottom-nav');
@@ -201,7 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'home-screen': screenHome,
         'card-screen': screenCard,
         'search-screen': screenSearch,
-        'latest-screen': screenLatest,
+        'map-screen': screenMap,
         'store-screen': screenStore,
         'mypage-screen': screenMypage
     };
@@ -216,106 +216,8 @@ document.addEventListener('DOMContentLoaded', () => {
     setupBottomNav();
     setupIsbnSearch();
     setupMypageListeners();
-    setupLatestScreen();
 
     // --- Functions ---
-
-    /* === LATEST (SNS) Screen === */
-    function loadTwitterWidget() {
-        const container = document.getElementById('x-widget-container');
-        if (!container) return;
-        
-        // 既存のコンテンツ（初期HTMLのaタグや古いiframe）をクリア
-        container.innerHTML = '';
-        container.style.display = 'block';
-
-        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-        
-        // X公式のSPA向けメソッド `createTimeline` を使用
-        // ※ `.load()` はPromiseを返さないため、`.then()` で確実な制御ができるこちらを採用
-        if (window.twttr && window.twttr.widgets) {
-            window.twttr.widgets.createTimeline(
-                {
-                    sourceType: 'profile',
-                    screenName: 'cf_wakabadai'
-                },
-                container,
-                {
-                    height: 500,
-                    chrome: 'noheader nofooter noborders transparent',
-                    theme: isDark ? 'dark' : 'light'
-                }
-            ).then(() => {
-                // レンダリング完了後にスケルトンを非表示にする
-                const skeleton = document.querySelector('.x-timeline-placeholder');
-                if (skeleton) {
-                    skeleton.style.display = 'none';
-                }
-                container.style.animation = 'fadeIn 0.5s ease forwards';
-            }).catch((error) => {
-                console.error("X タイムラインの読み込みに失敗しました:", error);
-            });
-        } else {
-            // スクリプトのロードが間に合っていない場合のリトライ
-            setTimeout(loadTwitterWidget, 300);
-        }
-    }
-
-    /* === LATEST (SNS) Screen === */
-    function setupLatestScreen() {
-        const btnX = document.getElementById('btn-sns-x');
-        const btnInsta = document.getElementById('btn-sns-insta');
-        const contentX = document.getElementById('sns-x');
-        const contentInsta = document.getElementById('sns-insta');
-        const slider = document.getElementById('sns-segment-slider');
-        const latestContent = document.getElementById('latest-content');
-
-        if (!btnX || !btnInsta) return;
-
-        function switchSnsTab(target) {
-            if (target === 'sns-x') {
-                btnX.classList.add('active');
-                btnInsta.classList.remove('active');
-                contentX.classList.add('active');
-                contentInsta.classList.remove('active');
-                if(slider) slider.style.transform = 'translateX(0)';
-            } else {
-                btnX.classList.remove('active');
-                btnInsta.classList.add('active');
-                contentX.classList.remove('active');
-                contentInsta.classList.add('active');
-                if(slider) slider.style.transform = 'translateX(100%)';
-            }
-        }
-
-        btnX.addEventListener('click', () => switchSnsTab('sns-x'));
-        btnInsta.addEventListener('click', () => switchSnsTab('sns-insta'));
-
-        // Swipe support
-        if (latestContent) {
-            let startX = 0;
-            let currentX = 0;
-            latestContent.addEventListener('touchstart', (e) => {
-                startX = e.touches[0].clientX;
-            }, { passive: true });
-            
-            latestContent.addEventListener('touchend', (e) => {
-                currentX = e.changedTouches[0].clientX;
-                const diff = startX - currentX;
-                // Swipe Left (Show Insta)
-                if (diff > 50) {
-                    switchSnsTab('sns-insta');
-                }
-                // Swipe Right (Show X)
-                else if (diff < -50) {
-                    switchSnsTab('sns-x');
-                }
-            }, { passive: true });
-        }
-        
-        // Init Twitter Widget
-        loadTwitterWidget();
-    }
 
     /* === Theme (Dark Mode) === */
     function initTheme() {
@@ -335,8 +237,8 @@ document.addEventListener('DOMContentLoaded', () => {
             document.documentElement.setAttribute('data-theme', 'dark');
             localStorage.setItem(THEME_KEY, 'dark');
         }
-        // Update Twitter Widget theme
-        loadTwitterWidget();
+        // Update Twitter Widget theme (Disabled for MAP integration)
+        // loadTwitterWidget();
     }
 
     function checkExistingData() {
@@ -399,8 +301,7 @@ document.addEventListener('DOMContentLoaded', () => {
             renderCardScreen();
         } else if (tabId === 'mypage-screen') {
             updateMypageInfo();
-        } else if (tabId === 'latest-screen') {
-            loadTwitterWidget();
+        // tabId === 'latest-screen' handling removed for MAP integration
         }
 
         // Request wake lock when on card screen
