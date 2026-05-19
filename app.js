@@ -217,6 +217,16 @@ document.addEventListener('DOMContentLoaded', () => {
     setupIsbnSearch();
     setupMypageListeners();
 
+    // --- Fullscreen Map Message Receiver ---
+    window.addEventListener('message', (event) => {
+        if (event.data && event.data.type === 'MAP_BACKGROUND_CLICK') {
+            const appContainer = document.getElementById('app-container');
+            if (appContainer && appContainer.classList.contains('map-active')) {
+                appContainer.classList.toggle('fullscreen-mode');
+            }
+        }
+    });
+
     // --- Functions ---
 
     /* === Theme (Dark Mode) === */
@@ -282,6 +292,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Deactivate ALL screens (including registration)
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+
+        // Toggle map-active and reset fullscreen mode accordingly
+        const appContainer = document.getElementById('app-container');
+        if (appContainer) {
+            if (tabId === 'map-screen') {
+                appContainer.classList.add('map-active');
+            } else {
+                appContainer.classList.remove('map-active');
+                appContainer.classList.remove('fullscreen-mode');
+            }
+        }
 
         // Activate target
         const target = tabScreens[tabId];
