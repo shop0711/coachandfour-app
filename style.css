@@ -1934,11 +1934,11 @@ button {
    MAP SCREEN & IFRAME
    =========================== */
 #map-screen {
-    padding: 0 0 calc(var(--nav-height) + env(safe-area-inset-bottom, 0px)) 0 !important;
-    height: 100%;
+    padding: 0 !important;
+    height: calc(100dvh - 96px - var(--nav-height) - env(safe-area-inset-bottom, 0px)) !important;
+    width: 100%;
     box-sizing: border-box;
     overflow: hidden;
-    flex-grow: 1;
 }
 
 #map-iframe {
